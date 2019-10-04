@@ -1,0 +1,18 @@
+{
+	"solutionPath": "D:\\Source\\SolutionFolder\\MySolution.sln",
+	"jsonReportsPath": "D:\\Source\\Stryker.Test\\Output\\",
+	"projectsToTest": [
+		{
+			"csProjPath":"D:\\Source\\SolutionFolder\\src\\ProjectFolder-A\\project.csproj",
+			"testPath":"D:\\Source\\SolutionFolder\\test\\ProjectFolder-A-UnitTests\\"
+		},
+		{
+			"csProjPath":"D:\\Source\\SolutionFolder\\src\\ProjectFolder-B\\project.csproj",
+			"testPath":"D:\\Source\\SolutionFolder\\test\\ProjectFolder-B-UnitTests\\"
+		},
+		{
+			"csProjPath":"D:\\Source\\SolutionFolder\\src\\ProjectFolder-C\\project.csproj",
+			"testPath":"D:\\Source\\SolutionFolder\\test\\ProjectFolder-C-UnitTests\\"
+		}
+	]
+}
