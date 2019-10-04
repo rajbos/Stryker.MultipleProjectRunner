@@ -30,6 +30,7 @@ The html report will be stand-alone after the run.
 
 ## DATAFILE
 In the datafile the following properties should be set:
+
 |Property|Example|Description|
 |---|---|---|
 |solutionPath|`D:\Source\SolutionFolder\MySolution.sln`|Full file path to the Visual Studio Solution file that the Projects in `projectsToTest` are a part of|
@@ -38,6 +39,7 @@ In the datafile the following properties should be set:
 
 ### ProjectsToTest array
 The projectsToTest property is an array of items with these properties:
+
 |Property|Example|Description|
 |---|---|---|
 |csProjPath|`D:\Source\SolutionFolder\src\ProjectFolder\project.csproj`|FilePath of the project file to mutate|
