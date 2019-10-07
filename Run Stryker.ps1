@@ -28,7 +28,6 @@ function RunForOneAssembly ($csprojPath, $testPath, $solutionPath, $outputPath) 
     Write-Host "Last file filename: $orgReportFilePath has timestamp: $dateTimeStamp"
 
     # create a new filename to use in the output
-    New-Item $outputPath -ItemType "directory" -Force
     $newFileName = "$outputPath" + $dateTimeStamp + "_"+ $fileName
     Write-Host "Copy the report file to '$newFileName'"
     # write the new file out to the report directory
@@ -90,6 +89,9 @@ function JoinAllJsonFiles ($joinedFileName) {
 # save where we started
 $startDir = Get-Location
 Write-Host "Starting at: " $startDir
+
+# create a new directory for the output if needed
+New-Item $outputPath -ItemType "directory" -Force
 try {
     # load the data file
     $strykerDataFilePath = "$startDir\Stryker.data.json"
