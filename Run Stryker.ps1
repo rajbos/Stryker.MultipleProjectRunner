@@ -168,9 +168,3 @@ function RunEverything ($startDir) {
         Set-Location $startDir
     }
 }
-
-# save where we started
-$startDir = Get-Location
-Write-Host "Starting at: " $startDir
-
-RunEverything $startDir
