@@ -86,27 +86,36 @@ function JoinAllJsonFiles ($joinedFileName) {
     Write-Host "Joined $($files.Count) files to the new json file: $joinedFileName"
 }
 
-# save where we started
-$startDir = Get-Location
-Write-Host "Starting at: " $startDir
-
-# create a new directory for the output if needed
-New-Item $outputPath -ItemType "directory" -Force
-try {
-    # load the data file
-    $strykerDataFilePath = "$startDir\Stryker.data.json"
-    $strykerData = (Get-Content $strykerDataFilePath | Out-String | ConvertFrom-Json)
-
-    # check for errors
-    if( -not $?) {
-        exit;
+function LoadConfigurationFile ($startDir) {    
+    # test for testdata first
+    $strykerDataFilePath = "$startDir\Stryker.TestData.json"
+    if (!(Test-Path $strykerDataFilePath -PathType Leaf)) {
+        # if no testdata, use the data file
+        $strykerDataFilePath = "$startDir\Stryker.data.json"
     }
 
+    Write-Host "Using configuration file at '$strykerDataFilePath'"
+    # load the data file
+    $strykerData = (Get-Content $strykerDataFilePath | Out-String | ConvertFrom-Json)
+        
+    # create a new directory for the output if needed
+    $outputPath = "$($strykerData.jsonReportsPath)"
+    New-Item $outputPath -ItemType "directory" -Force
+
+    return $strykerData
+}
+
+function DeleteDataFromPreviousRuns ($strykerData) {
+    if (!$strykerData) {
+        Write-Error "Cannot delete from unknown directory"
+        return
+    }
     # clear the output path
     Write-Host "Deleting previous json files from $($strykerData.jsonReportsPath)"
     Get-ChildItem -Path "$($strykerData.jsonReportsPath)" -Include *.json -File -Recurse | ForEach-Object { $_.Delete()}
+}
 
-    # mutate all projects in the data file
+function MutateAllAssemblies($strykerData){
     $counter = 1
     foreach ($project in $strykerData.projectsToTest) {
         Write-Host "Running mutation for project $($counter) of $($strykerData.projectsToTest.Length)"
@@ -114,14 +123,11 @@ try {
         RunForOneAssembly $project.csprojPath $project.testPath $strykerData.solutionPath $strykerData.jsonReportsPath
         $counter++
     }
+}
 
-    # check for errors
-    if( -not $?) {
-        exit;
-    }
-
+function CreateReportFromAllJsonFiles ($reportDir, $startDir) {
     # Join all the json files
-    Set-Location "$startDir\Output"
+    Set-Location "$reportDir"
     $joinedJsonFileName = "mutation-report.json"
 
     JoinAllJsonFiles $joinedJsonFileName
@@ -132,9 +138,39 @@ try {
     $reportTitle = "Stryker Mutation Testing"
     JoinJsonWithHtmlFile $joinedJsonFileName $reportFileName $emptyReportFileName $reportTitle
 
-    Write-Host "Created new report file: $startDir\Output\$reportFileName"
+    Write-Host "Created new report file: $reportDir\$reportFileName"
 }
-finally {
-    # change back to the starting directory
-    Set-Location $startDir
+
+function RunEverything ($startDir) {
+    try {
+        $strykerData = LoadConfigurationFile $startDir
+
+        # check for errors
+        if( -not $?) {
+            exit;
+        }
+
+        # clean up previous runs
+        DeleteDataFromPreviousRuns $strykerData
+
+        # mutate all projects in the data file
+        MutateAllAssemblies $strykerData
+
+        # check for errors
+        if( -not $?) {
+            exit;
+        }
+
+        CreateReportFromAllJsonFiles $strykerData.jsonReportsPath $startDir
+    }
+    finally {
+        # change back to the starting directory
+        Set-Location $startDir
+    }
 }
+
+# save where we started
+$startDir = Get-Location
+Write-Host "Starting at: " $startDir
+
+RunEverything $startDir
