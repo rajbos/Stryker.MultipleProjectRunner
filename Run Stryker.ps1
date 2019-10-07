@@ -86,12 +86,16 @@ function JoinAllJsonFiles ($joinedFileName) {
     Write-Host "Joined $($files.Count) files to the new json file: $joinedFileName"
 }
 
-function LoadConfigurationFile ($startDir) {    
-    # test for testdata first
-    $strykerDataFilePath = "$startDir\Stryker.TestData.json"
+function LoadConfigurationFile ($startDir, $configurationFile) {  
+    # try to load given file
+    $strykerDataFilePath = $configurationFile  
     if (!(Test-Path $strykerDataFilePath -PathType Leaf)) {
-        # if no testdata, use the data file
-        $strykerDataFilePath = "$startDir\Stryker.data.json"
+        # test for testdata first
+        $strykerDataFilePath = "$startDir\Stryker.TestData.json"
+        if (!(Test-Path $strykerDataFilePath -PathType Leaf)) {
+            # if no testdata, use the data file
+            $strykerDataFilePath = "$startDir\Stryker.data.json"
+        }
     }
 
     Write-Host "Using configuration file at '$strykerDataFilePath'"
@@ -141,9 +145,9 @@ function CreateReportFromAllJsonFiles ($reportDir, $startDir) {
     Write-Host "Created new report file: $reportDir\$reportFileName"
 }
 
-function RunEverything ($startDir) {
+function RunEverything ($startDir, $configurationFile) {
     try {
-        $strykerData = LoadConfigurationFile $startDir
+        $strykerData = LoadConfigurationFile $startDir $configurationFile
 
         # check for errors
         if( -not $?) {

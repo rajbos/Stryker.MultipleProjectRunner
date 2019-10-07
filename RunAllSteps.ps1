@@ -5,4 +5,4 @@
 $startDir = Get-Location
 Write-Host "Starting at: " $startDir
 
-RunEverything $startDir
+RunEverything $startDir $startDir
