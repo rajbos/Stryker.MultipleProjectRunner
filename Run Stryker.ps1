@@ -175,3 +175,30 @@ function RunEverything ($startDir, $configurationFile) {
         Set-Location $startDir
     }
 }
+
+
+function RunStryker ($startDir, $configurationFile) {
+    try {
+        $strykerData = LoadConfigurationFile $startDir $configurationFile
+
+        # check for errors
+        if( -not $?) {
+            exit;
+        }
+
+        # clean up previous runs
+        DeleteDataFromPreviousRuns $strykerData
+
+        # mutate all projects in the data file
+        MutateAllAssemblies $strykerData
+
+        # check for errors
+        if( -not $?) {
+            exit;
+        }
+    }
+    finally {
+        # change back to the starting directory
+        Set-Location $startDir
+    }
+}
