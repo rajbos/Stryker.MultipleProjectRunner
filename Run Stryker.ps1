@@ -88,13 +88,16 @@ function JoinAllJsonFiles ($joinedFileName) {
 
 function LoadConfigurationFile ($startDir, $configurationFile) {  
     # try to load given file
-    $strykerDataFilePath = $configurationFile  
+    $strykerDataFilePath = $configurationFile    
+    Write-Debug "Searching for configuration file in this location: $strykerDataFilePath"
     if (!(Test-Path $strykerDataFilePath -PathType Leaf)) {
         # test for testdata first
         $strykerDataFilePath = "$startDir\Stryker.TestData.json"
+        Write-Debug "Searching for configuration file in this location: $strykerDataFilePath"
         if (!(Test-Path $strykerDataFilePath -PathType Leaf)) {
             # if no testdata, use the data file
-            $strykerDataFilePath = "$startDir\Stryker.data.json"
+            $strykerDataFilePath = "$startDir\Stryker.data.json"            
+            Write-Debug "Using configuration file in this location: $strykerDataFilePath"
         }
     }
 
