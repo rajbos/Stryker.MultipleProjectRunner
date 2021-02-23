@@ -43,4 +43,4 @@ The projectsToTest property is an array of items with these properties:
 |Property|Example|Description|
 |---|---|---|
 |csProjPath|`D:\Source\SolutionFolder\src\ProjectFolder\project.csproj`|FilePath of the project file to mutate|
-|testPath|`D:\Source\SolutionFolder\test\ProjectFolder-Tests\project.csproj`|FilePath of the test folder to run the tests in|
+|testPath|`D:\Source\SolutionFolder\test\ProjectFolder-Tests\`|FilePath of the test folder to run the tests in|
