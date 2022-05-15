@@ -5,7 +5,7 @@ function RunForOneAssembly ($csprojPath, $testPath, $solutionPath, $outputPath) 
     Set-Location $testPath
 
     Write-Host "Calling Stryker"
-    dotnet stryker --project-file "$csprojPath" --solution-path $solutionPath --reporters "['json', 'progress']"
+    dotnet stryker --project "$csprojPath" --solution $solutionPath --reporter "json" --reporter "progress"
 
     if( -not $? ){
         Write-Host "Error in running Stryker, exiting the script"
