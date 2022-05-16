@@ -5,7 +5,7 @@ function RunForOneAssembly ($csprojPath, $testPath, $solutionPath, $outputPath) 
     Set-Location $testPath
 
     Write-Host "Calling Stryker"
-    dotnet stryker --project-file "$csprojPath" --solution-path $solutionPath --reporters "['json', 'progress']"
+    dotnet stryker --project "$csprojPath" --solution $solutionPath --reporter "json" --reporter "progress"
 
     if( -not $? ){
         Write-Host "Error in running Stryker, exiting the script"
@@ -35,26 +35,29 @@ function RunForOneAssembly ($csprojPath, $testPath, $solutionPath, $outputPath) 
 }
 
 function JoinStykerJsonFile ($additionalFile, $joinedFileName) {
-    # Stryker report json files object is not an array :-(, so we cannot join them and have to do it manually
-    $report = (Get-Content $joinedFileName | Out-String)
-    $additionalContent = (Get-Content $additionalFile | Out-String)
+    # Stryker report json files object is not an array :-(, so we cannot join them and have to do it manually 
+	$report = (Get-Content $joinedFileName | Out-String) 
+	$additionalContent = (Get-Content $additionalFile | Out-String) 
 
-    $searchString = '"files": {'
-    $searchStringLength = $searchString.Length
-    $startCopy = $additionalContent.IndexOf($searchString)
-    $offSet = 9
-    $copyText = $additionalContent.Substring($startCopy+$searchStringLength, $additionalContent.Length-$offSet-$startCopy-$searchStringLength)
-        
-    # save the first part of the report file
-    $startCopy = $report.Substring(0, $report.Length-$offSet)
-    # add in the new copy text
-    $startCopy = $startCopy + ",`r`n" + $copyText
-    # add in the end of the file again
-    $fileEnding = $report.Substring($report.Length-$offSet, $offSet)
-    $startCopy = $startCopy + $fileEnding
+	$searchString = '"files":{' 
+	$searchStringLength = $searchString.Length 
+	$startCopy = $additionalContent.IndexOf($searchString) 
+	$offSet = 2 
+	$copyText = $additionalContent.Substring($startCopy+$searchStringLength, $additionalContent.Length-$offSet-$startCopy-$searchStringLength) 
 
-    # save the new file to disk
-    Set-Content -Path $joinedFileName -Value $startCopy
+	# save the first part of the report file 
+	$lastIndex = $report.LastIndexOf('}}') 
+	$startCopy = $report.Substring(0, $lastIndex)
+
+	# add in the new copy text 
+	$startCopy = $startCopy + ", " + $copyText 
+
+	# add in the end of the file again 
+	$fileEnding = $report.Substring($report.Length-$offSet, $offSet) 
+	$startCopy = $startCopy + $fileEnding 
+
+	# save the new file to disk 
+	Set-Content -Path $joinedFileName -Value $startCopy
 }
 
 function JoinJsonWithHtmlFile ($joinedJsonFileName, $reportFileName, $emptyReportFileName, $reportTitle) {
