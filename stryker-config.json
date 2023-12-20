@@ -1,0 +1,13 @@
+{
+  "stryker-config": {
+    "mutate": [
+      "!**/program.cs",
+      "!**/ServiceRegistration/*.cs",
+      "!**/*Controller.cs",
+      "!**/ServiceRegistrar/*.cs",
+      "!**/Interface*/*.cs",
+      "!**/Swashbuckle/*.cs",
+      "!Swagger*.cs"
+    ]
+  }
+}

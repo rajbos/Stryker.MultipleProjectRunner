@@ -1,0 +1,40 @@
+{
+	"projectmapper": [
+		{
+			"csProjPath":"ELN.Search\\BPT.Search.Api\\BPT.Search.Api.csproj",
+			"testPath":"ELN.Search\\BPT.Search.Api.Tests\\",
+			"referenceProjectPath": []
+		},
+		{
+			"csProjPath":"ELN.Search\\ELN.Search.Api\\ELN.Search.Api.csproj",
+			"testPath":"ELN.Search\\ELN.Search.Api.Tests\\",
+			"referenceProjectPath": [
+			"ELN.Search\\ELN.Search.Infrastructure\\ELN.Search.Infrastructure.csproj"
+			]
+		},
+		{
+			"csProjPath": "ELN.Search\\ELN.SearchIndexer.Api\\ELN.SearchIndexer.Api.csproj",
+			"testPath": "ELN.Search\\ELN.Experiment.SearchIndexer.Tests\\",
+			"referenceProjectPath": [
+			"ELN.Search\\ELN.SearchIndexer.Infrastructure\\ELN.SearchIndexer.Infrastructure.csproj",
+			"ELN.Search\\ELN.Search.Common\\ELN.Search.Common.csproj"
+			]
+		},
+		{
+			"csProjPath": "ELN.Search\\ELN.Preparation.SearchIndexer.API\\ELN.Preparation.SearchIndexer.API.csproj",
+			"testPath": "ELN.Search\\ELN.Preparation.SearchIndexer.Test\\",
+			"referenceProjectPath": [
+			"ELN.Search\\ELN.Preparation.SearchIndexer.Infrastructure\\ELN.Preparation.SearchIndexer.Infrastructure.csproj",
+			"ELN.Search\\ELN.Search.Common\\ELN.Search.Common.csproj"
+			]
+		},
+		{
+			"csProjPath": "ELN.Search\\ELN.Recipe.SearchIndexer.API\\ELN.Recipe.SearchIndexer.API.csproj",
+			"testPath": "ELN.Search\\ELN.Recipe.SearchIndexer.Test\\",
+			"referenceProjectPath": [
+			"ELN.Search\\ELN.Recipe.SearchIndexer.Infrastructure\\ELN.Recipe.SearchIndexer.Infrastructure.csproj",
+			"ELN.Search\\ELN.Search.Common\\ELN.Search.Common.csproj"
+			]
+		}
+	]
+}
